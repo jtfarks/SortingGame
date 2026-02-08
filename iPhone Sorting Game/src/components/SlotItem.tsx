@@ -1,4 +1,4 @@
-import { useDrag } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import { ITEM_IMAGES } from './SortingGame';
 
 interface SlotItemProps {
@@ -6,9 +6,10 @@ interface SlotItemProps {
   shelfIndex: number;
   rowIndex: number;
   slotIndex: number;
+  onShelfToShelfMove: (fromShelfIndex: number, fromSlotIndex: number, toShelfIndex: number, toSlotIndex: number) => void;
 }
 
-export function SlotItem({ item, shelfIndex, rowIndex, slotIndex }: SlotItemProps) {
+export function SlotItem({ item, shelfIndex, rowIndex, slotIndex, onShelfToShelfMove }: SlotItemProps) {
   const [{ isDragging }, drag] = useDrag({
     type: 'SHELF_ITEM',
     item: () => {
@@ -27,14 +28,25 @@ export function SlotItem({ item, shelfIndex, rowIndex, slotIndex }: SlotItemProp
     }),
   });
 
+  const [{ isOver }, drop] = useDrop({
+    accept: 'SHELF_ITEM',
+    drop: (dragItem: { fromShelf: number; fromSlot: number }) => {
+      onShelfToShelfMove(dragItem.fromShelf, dragItem.fromSlot, shelfIndex, slotIndex);
+    },
+    canDrop: () => item === null,
+    collect: (monitor) => ({
+      isOver: monitor.isOver() && monitor.canDrop(),
+    }),
+  });
+
   return (
     <div
-      ref={drag}
+      ref={(node) => { drag(drop(node)); }}
       className={`flex items-end justify-center w-full h-full transition-all ${
         item
           ? 'cursor-move'
           : ''
-      } ${isDragging ? 'opacity-50' : ''}`}
+      } ${isDragging ? 'opacity-50' : ''} ${isOver ? 'bg-white/30 rounded' : ''}`}
     >
       {item && (
         <img

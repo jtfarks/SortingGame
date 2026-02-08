@@ -49,11 +49,11 @@ export const ITEM_IMAGES: Record<string, string> = {
 const ITEM_TYPES = Object.keys(ITEM_IMAGES);
 
 const LEVEL_CONFIG = [
-  { level: 1, itemTypes: 12, time: 120 },
-  { level: 2, itemTypes: 12, time: 100 },
-  { level: 3, itemTypes: 12, time: 90 },
-  { level: 4, itemTypes: 12, time: 80 },
-  { level: 5, itemTypes: 12, time: 70 },
+  { level: 1, itemTypes: 9, time: 120 },
+  { level: 2, itemTypes: 9, time: 100 },
+  { level: 3, itemTypes: 9, time: 90 },
+  { level: 4, itemTypes: 9, time: 80 },
+  { level: 5, itemTypes: 9, time: 70 },
 ];
 
 export function SortingGame() {
@@ -105,29 +105,48 @@ export function SortingGame() {
   // Initialize game
   const initializeGame = (levelNum: number) => {
     const config = LEVEL_CONFIG[Math.min(levelNum - 1, LEVEL_CONFIG.length - 1)];
-    const selectedTypes = ITEM_TYPES.slice(0, config.itemTypes);
-    
-    // Generate exactly 36 items (12 types × 3 of each)
-    const items: ItemType[] = [];
+
+    // Fisher-Yates shuffle to randomly pick item types
+    const shuffledTypes = [...ITEM_TYPES];
+    for (let i = shuffledTypes.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledTypes[i], shuffledTypes[j]] = [shuffledTypes[j], shuffledTypes[i]];
+    }
+    const selectedTypes = shuffledTypes.slice(0, config.itemTypes);
+
+    // Generate items: 3 of each selected type
+    const items: (ItemType | null)[] = [];
     selectedTypes.forEach(type => {
-      for (let i = 0; i < 3; i++) {
-        items.push(type);
-      }
+      for (let i = 0; i < 3; i++) items.push(type);
     });
 
-    // Shuffle items
-    const shuffled = items.sort(() => Math.random() - 0.5);
-    
-    // Convert to shelf structure (12 shelves × 3 slots)
-    const newShelves: ShelfSlot[][] = [];
-    for (let i = 0; i < 12; i++) {
-      const shelfSlots: ShelfSlot[] = [];
-      for (let j = 0; j < 3; j++) {
-        const slotIndex = i * 3 + j;
-        shelfSlots.push({ item: shuffled[slotIndex] });
+    // Pad with nulls to fill all 36 slots
+    while (items.length < 36) items.push(null);
+
+    // Shuffle all slots (items + empties) using Fisher-Yates
+    // Repeat until no shelf starts as a triple
+    let newShelves: ShelfSlot[][];
+    do {
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
       }
-      newShelves.push(shelfSlots);
-    }
+      newShelves = [];
+      for (let i = 0; i < 12; i++) {
+        newShelves.push([
+          { item: items[i * 3] },
+          { item: items[i * 3 + 1] },
+          { item: items[i * 3 + 2] },
+        ]);
+      }
+    } while (
+      newShelves.some(shelf => {
+        const filled = shelf.filter(s => s.item !== null);
+        return filled.length === 3
+          && filled[0].item === filled[1].item
+          && filled[1].item === filled[2].item;
+      })
+    );
 
     setShelves(newShelves);
     setTimeLeft(config.time);
@@ -221,34 +240,22 @@ export function SortingGame() {
     }
   };
 
-  const moveItemFromShelfToShelf = (fromShelfIndex: number, fromSlotIndex: number, toShelfIndex: number) => {
-    const fromShelf = shelves[fromShelfIndex];
-    const toShelf = shelves[toShelfIndex];
-    const item = fromShelf[fromSlotIndex].item;
-    
-    if (!item) return;
+  const moveItemFromShelfToShelf = (fromShelfIndex: number, fromSlotIndex: number, toShelfIndex: number, toSlotIndex: number) => {
+    const item = shelves[fromShelfIndex][fromSlotIndex].item;
 
-    const emptySlotIndex = toShelf.findIndex(slot => slot.item === null);
-    if (emptySlotIndex === -1) return; // Target shelf full
+    if (!item) return;
+    if (fromShelfIndex === toShelfIndex && fromSlotIndex === toSlotIndex) return;
+    if (shelves[toShelfIndex][toSlotIndex].item !== null) return; // Target slot occupied
 
     const newShelves = shelves.map((shelf, shelfIdx) => {
-      if (shelfIdx === fromShelfIndex) {
-        return shelf.map((slot, slotIdx) => {
-          if (slotIdx === fromSlotIndex) {
-            return { item: null };
-          }
-          return slot;
-        });
-      }
-      if (shelfIdx === toShelfIndex) {
-        return shelf.map((slot, slotIdx) => {
-          if (slotIdx === emptySlotIndex) {
-            return { item };
-          }
-          return slot;
-        });
-      }
-      return shelf;
+      const isFrom = shelfIdx === fromShelfIndex;
+      const isTo = shelfIdx === toShelfIndex;
+      if (!isFrom && !isTo) return shelf;
+      return shelf.map((slot, slotIdx) => {
+        if (isFrom && slotIdx === fromSlotIndex) return { item: null };
+        if (isTo && slotIdx === toSlotIndex) return { item };
+        return slot;
+      });
     });
 
     setShelves(newShelves);

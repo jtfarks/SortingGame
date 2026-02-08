@@ -3,7 +3,7 @@ import { Shelf } from './Shelf';
 
 interface GameBoardProps {
   shelves: ShelfSlot[][];
-  onShelfToShelfMove: (fromShelfIndex: number, fromSlotIndex: number, toShelfIndex: number) => void;
+  onShelfToShelfMove: (fromShelfIndex: number, fromSlotIndex: number, toShelfIndex: number, toSlotIndex: number) => void;
 }
 
 export function GameBoard({ shelves, onShelfToShelfMove }: GameBoardProps) {

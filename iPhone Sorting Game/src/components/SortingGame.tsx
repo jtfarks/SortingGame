@@ -264,8 +264,8 @@ export function SortingGame() {
 
   return (
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
-      <div className="min-h-full w-full max-w-md mx-auto relative flex flex-col">
-        <div className="absolute left-0 right-0 z-20 px-4" style={{ top: '20vh' }}>
+      <div className="h-full w-full max-w-md mx-auto relative flex flex-col">
+        <div className="absolute left-0 right-0 z-20 px-4" style={{ top: '20%' }}>
           <GameHeader
             score={score}
             timeLeft={timeLeft}

@@ -265,13 +265,13 @@ export function SortingGame() {
   return (
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
       <div className="min-h-screen w-full max-w-md mx-auto relative flex flex-col">
-        <div className="relative z-10 p-4 pt-safe">
+        <div className="absolute left-0 right-0 z-20 px-4" style={{ top: '20vh' }}>
           <GameHeader
             score={score}
             timeLeft={timeLeft}
             level={level}
             isPlaying={isPlaying}
-            stats={stats}
+            totalMatches={LEVEL_CONFIG[Math.min(level - 1, LEVEL_CONFIG.length - 1)].itemTypes}
           />
         </div>
 

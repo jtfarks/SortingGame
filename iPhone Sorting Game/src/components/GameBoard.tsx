@@ -14,10 +14,9 @@ export function GameBoard({ shelves, onShelfToShelfMove }: GameBoardProps) {
     rows.push(rowShelves);
   }
 
-  // Each row is absolutely positioned so its bottom edge aligns with the
-  // shelf surface in the background image.  Adjust these percentages to
-  // move rows up/down on the shelves.
-  const ROW_TOPS = ['22%', '39.5%', '52%', '67.75%'];
+  // Percentages of the full screen height, matching shelf surfaces in the
+  // background image.  Adjust these to move rows up/down on the shelves.
+  const ROW_TOPS = ['37.25%', '52%', '61%', '74.25%'];
 
   return (
     <div className="absolute inset-0">

@@ -69,6 +69,7 @@ export function SortingGame() {
   );
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
+  const [startScreenLoaded, setStartScreenLoaded] = useState(false);
   const [stats, setStats] = useState<GameStats>({
     highScore: 0,
     gamesPlayed: 0,
@@ -260,6 +261,22 @@ export function SortingGame() {
     checkForTriples(newShelves, toShelfIndex);
   };
 
+  const showStartScreen = !isPlaying && !gameOver;
+
+  // Hide everything until the start screen image has loaded
+  if (showStartScreen && !startScreenLoaded) {
+    return (
+      <div className="h-full w-full bg-[#3b7b3a]">
+        <img
+          src={startScreenImg}
+          alt=""
+          className="hidden"
+          onLoad={() => setStartScreenLoaded(true)}
+        />
+      </div>
+    );
+  }
+
   return (
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
       <CustomDragLayer />
@@ -274,14 +291,19 @@ export function SortingGame() {
           />
         </div>
 
-        {!isPlaying && !gameOver && (
+        {showStartScreen && (
           <div
-            className="absolute inset-0 z-30 flex items-end justify-center bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${startScreenImg})`, paddingBottom: '15%' }}
+            className="absolute inset-0 z-30 flex items-end justify-center"
+            style={{ paddingBottom: '15%' }}
           >
+            <img
+              src={startScreenImg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+            />
             <button
               onClick={startGame}
-              className="hover:scale-105 active:scale-95 transition-transform"
+              className="relative z-10 hover:scale-105 active:scale-95 transition-transform"
             >
               <img src={startButtonImg} alt="Start" className="w-48" />
             </button>

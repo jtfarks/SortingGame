@@ -6,6 +6,8 @@ import { CustomDragLayer } from './CustomDragLayer';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 
+import startScreenImg from '../assets/start-screen.png';
+import startButtonImg from '../assets/start-button.png';
 import cherryImg from '../assets/fruits/Cherry.png';
 import blueberryPastryImg from '../assets/fruits/Blueberry pastry.png';
 import lollypopImg from '../assets/fruits/Lollypop.png';
@@ -193,12 +195,7 @@ export function SortingGame() {
   }, [shelves, isPlaying]);
 
   const handleLevelComplete = () => {
-    if (level < LEVEL_CONFIG.length) {
-      setLevel(prev => prev + 1);
-      initializeGame(level + 1);
-    } else {
-      handleGameOver(true);
-    }
+    handleGameOver(true);
   };
 
   const handleGameOver = (isWin: boolean) => {
@@ -278,12 +275,15 @@ export function SortingGame() {
         </div>
 
         {!isPlaying && !gameOver && (
-          <div className="relative z-10 flex-1 flex items-center justify-center">
+          <div
+            className="absolute inset-0 z-30 flex items-end justify-center bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${startScreenImg})`, paddingBottom: '15%' }}
+          >
             <button
               onClick={startGame}
-              className="bg-white text-purple-600 px-8 py-4 rounded-2xl text-xl font-bold shadow-lg hover:scale-105 transition-transform"
+              className="hover:scale-105 active:scale-95 transition-transform"
             >
-              Start Game
+              <img src={startButtonImg} alt="Start" className="w-48" />
             </button>
           </div>
         )}

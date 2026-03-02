@@ -13,13 +13,15 @@ export function DesktopWrapper({ children }: DesktopWrapperProps) {
         backgroundImage: `url(${mapBg})`,
       }}
     >
-      <h1
-        className="text-4xl mb-2 text-[#5c3d2e]"
-        style={{ fontFamily: "'Architects Daughter', cursive" }}
-      >
-        Anya Cafe
-      </h1>
-      <p className="text-sm text-[#8b6f5e] mb-6">Sort the treats before time runs out!</p>
+      <div className="bg-white/75 rounded-2xl px-8 py-4 mb-6 text-center">
+        <h1
+          className="text-4xl mb-1 text-[#5c3d2e]"
+          style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+        >
+          Anya's Bits and Bobs
+        </h1>
+        <p className="text-sm text-[#8b6f5e]">iPhone Mock-Up</p>
+      </div>
       <PhoneFrame>
         {children}
       </PhoneFrame>

@@ -53,7 +53,10 @@ export function SlotItem({ item, shelfIndex, rowIndex, slotIndex, onShelfToShelf
           src={ITEM_IMAGES[item]}
           alt={item}
           draggable={false}
-          className="w-10 h-10 object-contain hover:scale-110"
+          className={`object-contain object-bottom hover:scale-110 ${
+            item === 'wormPastry' ? 'w-[72px] h-[72px]' :
+            ['whipCreamCup', 'blueberryPastry'].includes(item) ? 'w-[60px] h-[60px]' : 'w-[50px] h-[50px]'
+          }`}
         />
       )}
     </div>

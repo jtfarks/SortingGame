@@ -1,5 +1,7 @@
-import { Trophy, RotateCcw, Star, Flame } from 'lucide-react';
+import { Trophy, Star, Flame } from 'lucide-react';
 import { motion } from 'motion/react';
+import timesUpBg from '../assets/times-up-background.png';
+import tryAgainBtn from '../assets/try-again-button.png';
 
 interface GameOverModalProps {
   won: boolean;
@@ -14,6 +16,33 @@ interface GameOverModalProps {
 }
 
 export function GameOverModal({ won, score, level, stats, onRestart }: GameOverModalProps) {
+  if (!won) {
+    return (
+      <div className="absolute inset-0 z-50 flex flex-col">
+        <img
+          src={timesUpBg}
+          alt="Time's Up!"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="relative flex-1 flex flex-col justify-end items-center -mb-6">
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.5, type: 'spring', stiffness: 260, damping: 20 }}
+            onClick={onRestart}
+            className="hover:scale-105 active:scale-95 transition-transform"
+          >
+            <img
+              src={tryAgainBtn}
+              alt="Try Again"
+              className="w-64"
+            />
+          </motion.button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <motion.div
@@ -23,33 +52,16 @@ export function GameOverModal({ won, score, level, stats, onRestart }: GameOverM
         className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl"
       >
         <div className="text-center">
-          {won ? (
-            <>
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring' }}
-                className="text-6xl mb-4"
-              >
-                🎉
-              </motion.div>
-              <h2 className="text-3xl font-bold text-green-600 mb-2">Victory!</h2>
-              <p className="text-gray-600 mb-4">You completed all levels!</p>
-            </>
-          ) : (
-            <>
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring' }}
-                className="text-6xl mb-4"
-              >
-                ⏰
-              </motion.div>
-              <h2 className="text-3xl font-bold text-orange-600 mb-2">Time's Up!</h2>
-              <p className="text-gray-600 mb-4">Try again to beat your record!</p>
-            </>
-          )}
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: 'spring' }}
+            className="text-6xl mb-4"
+          >
+            🎉
+          </motion.div>
+          <h2 className="text-3xl font-bold text-green-600 mb-2">Victory!</h2>
+          <p className="text-gray-600 mb-4">You completed all levels!</p>
 
           <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl p-6 mb-6">
             <div className="flex items-center justify-center gap-2 mb-4">
@@ -57,7 +69,7 @@ export function GameOverModal({ won, score, level, stats, onRestart }: GameOverM
               <span className="text-4xl font-bold text-purple-800">{score}</span>
             </div>
             <div className="text-sm text-gray-600 mb-2">Level {level} Reached</div>
-            
+
             <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-purple-200">
               <div className="text-center">
                 <Trophy className="w-5 h-5 text-yellow-500 mx-auto mb-1" />
@@ -81,7 +93,6 @@ export function GameOverModal({ won, score, level, stats, onRestart }: GameOverM
             onClick={onRestart}
             className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform shadow-lg"
           >
-            <RotateCcw className="w-5 h-5" />
             Play Again
           </button>
         </div>

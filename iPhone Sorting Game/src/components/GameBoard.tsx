@@ -14,9 +14,10 @@ export function GameBoard({ shelves, onShelfToShelfMove }: GameBoardProps) {
     rows.push(rowShelves);
   }
 
-  // Percentages of the full screen height, matching shelf surfaces in the
-  // background image.  Adjust these to move rows up/down on the shelves.
-  const ROW_TOPS = ['37.25%', '52%', '61%', '74.25%'];
+  // Percentages of the full screen height where each shelf surface sits in
+  // the background image.  Rows use translateY(-100%) so their bottom edge
+  // aligns with these values — items sit on the shelf automatically.
+  const SHELF_SURFACES = ['44.7%', '58.75%', '68.5%', '81.7%'];
 
   return (
     <div className="absolute inset-0">
@@ -24,7 +25,7 @@ export function GameBoard({ shelves, onShelfToShelfMove }: GameBoardProps) {
         <div
           key={rowIndex}
           className="absolute flex justify-between"
-          style={{ top: ROW_TOPS[rowIndex], left: '8%', right: '8%', gap: '6%' }}
+          style={{ top: SHELF_SURFACES[rowIndex], transform: 'translateY(-100%)', left: '8%', right: '8%', gap: '6%' }}
         >
           {rowShelves.map((shelf, colIndex) => {
             const shelfIndex = rowIndex * 3 + colIndex;

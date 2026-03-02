@@ -59,7 +59,7 @@ const LEVEL_CONFIG = [
 export function SortingGame() {
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(120);
+  const [timeLeft, setTimeLeft] = useState(LEVEL_CONFIG[0].time);
   const [isPlaying, setIsPlaying] = useState(false);
   const [shelves, setShelves] = useState<ShelfSlot[][]>(
     Array(12).fill(null).map(() => Array(3).fill({ item: null }))

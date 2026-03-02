@@ -11,7 +11,7 @@ interface ShelfProps {
 export function Shelf({ shelfIndex, rowIndex, slots, onShelfToShelfMove }: ShelfProps) {
   return (
     <div className="flex-1 transition-all">
-      <div className="grid grid-cols-3 h-16">
+      <div className="grid grid-cols-3 h-[76px]">
         {slots.map((slot, index) => (
           <SlotItem
             key={index}

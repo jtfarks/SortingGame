@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { PhoneFrame } from './PhoneFrame';
+import mapBg from '../assets/map.jpeg';
 
 interface DesktopWrapperProps {
   children: ReactNode;
@@ -7,9 +8,9 @@ interface DesktopWrapperProps {
 
 export function DesktopWrapper({ children }: DesktopWrapperProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center"
+    <div className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat"
       style={{
-        background: 'linear-gradient(135deg, #fdf4e3 0%, #fce4d6 30%, #f5d0c5 60%, #e8c4b8 100%)',
+        backgroundImage: `url(${mapBg})`,
       }}
     >
       <h1

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { GameBoard } from './GameBoard';
 import { GameHeader } from './GameHeader';
 import { GameOverModal } from './GameOverModal';
+import { CustomDragLayer } from './CustomDragLayer';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 
@@ -264,6 +265,7 @@ export function SortingGame() {
 
   return (
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+      <CustomDragLayer />
       <div className="h-full w-full max-w-md mx-auto relative flex flex-col">
         <div className="absolute left-0 right-0 z-20 px-4" style={{ top: '20%' }}>
           <GameHeader

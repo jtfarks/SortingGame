@@ -46,7 +46,7 @@ export function SlotItem({ item, shelfIndex, rowIndex, slotIndex, onShelfToShelf
         item
           ? 'cursor-move'
           : ''
-      } ${isDragging ? 'opacity-50' : ''} ${isOver ? 'bg-white/30 rounded' : ''}`}
+      } ${isDragging ? 'opacity-0' : ''} ${isOver ? 'bg-white/30 rounded' : ''}`}
     >
       {item && (
         <img
